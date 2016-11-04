@@ -5,11 +5,14 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.os.RemoteException;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
+
+import com.example.myapplication.aidl.IMyAidlInterface;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -20,6 +23,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button bindService;
 
     private Button unbindService;
+
+    private IMyAidlInterface myAidlInterface;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +63,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
+            myAidlInterface=(IMyAidlInterface)service;
+            try{
+                int result = myAidlInterface.puls(3,5);
+                String upperStr = myAidlInterface.toUpperCase("hello");
+                Log.e("hei","result is "+result+"\n"+"upperStr is "+upperStr);
+            }catch (RemoteException e) {
+                e.printStackTrace();
+            }
         }
     };
 

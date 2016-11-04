@@ -7,7 +7,10 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
+import android.os.RemoteException;
 import android.util.Log;
+
+import com.example.myapplication.aidl.IMyAidlInterface;
 
 /**
  * Created by yanshu on 2016/11/3.
@@ -48,8 +51,23 @@ public class MyService extends Service {
     @Override
     public IBinder onBind(Intent intent) {
         Log.e(TAG, "onBind called.");
-        return null;
+        return mBinder;
     }
+
+    IMyAidlInterface.Stub mBinder = new IMyAidlInterface.Stub() {
+        @Override
+        public int puls(int a, int b) throws RemoteException {
+            return a+b;
+        }
+
+        @Override
+        public String toUpperCase(String str) throws RemoteException {
+            if(str!=null){
+             return str.toUpperCase();
+            }
+            return null;
+        }
+    };
 
     @Override
     public boolean onUnbind(Intent intent) {
